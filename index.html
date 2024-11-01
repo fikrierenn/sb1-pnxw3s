@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hal Kasa Takip Sistemi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-box-seam me-2"></i>
+                Hal Kasa Takip Sistemi
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Günlük Durum -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-calendar-check me-2"></i>
+                    Günlük Durum
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-card-body">
+                                <h6 class="stat-card-title">Net Kasa</h6>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-box-seam stat-icon"></i>
+                                    <span id="dailyNetBoxes" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-details">
+                                    <small>Giriş: <span id="dailyInBoxes">0</span></small>
+                                    <small>Çıkış: <span id="dailyOutBoxes">0</span></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-card-body">
+                                <h6 class="stat-card-title">Rehin Tutarı</h6>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-currency-lira stat-icon"></i>
+                                    <span id="dailyPledge" class="stat-value">₺0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-card-body">
+                                <h6 class="stat-card-title">İşlem Sayısı</h6>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-graph-up stat-icon"></i>
+                                    <span id="dailyTransactions" class="stat-value">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Genel Durum -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-clipboard-data me-2"></i>
+                    Genel Durum
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="stat-card" style="cursor: pointer" id="showStoreReport">
+                            <div class="stat-card-body">
+                                <h6 class="stat-card-title">
+                                    Toplam Net Kasa
+                                    <small class="text-muted">(Rapor için tıklayın)</small>
+                                </h6>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-box-seam stat-icon"></i>
+                                    <span id="totalNetBoxes" class="stat-value">0</span>
+                                </div>
+                                <div class="stat-details">
+                                    <small>Giriş: <span id="totalInBoxes">0</span></small>
+                                    <small>Çıkış: <span id="totalOutBoxes">0</span></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-card-body">
+                                <h6 class="stat-card-title">Toplam Rehin Tutarı</h6>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-currency-lira stat-icon"></i>
+                                    <span id="totalPledge" class="stat-value">₺0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-card-body">
+                                <h6 class="stat-card-title">Toplam İşlem Sayısı</h6>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-graph-up stat-icon"></i>
+                                    <span id="totalTransactions" class="stat-value">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Arama Filtreleri -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Tarih Filtrele</label>
+                        <input type="date" id="dateFilter" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Hal Numarası</label>
+                        <input type="text" id="halNoFilter" class="form-control" placeholder="Hal numarası ile ara...">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Genel Arama</label>
+                        <input type="text" id="generalSearch" class="form-control" placeholder="Tüm alanlarda ara...">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- İşlem Tablosu -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-table me-2"></i>
+                    Kasa Hareketleri Listesi
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="transactionsTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Hal No</th>
+                                <th>İşlem Türü</th>
+                                <th>Kasa Adedi</th>
+                                <th>Tarih/Saat</th>
+                                <th>Rehin Tutarı</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
