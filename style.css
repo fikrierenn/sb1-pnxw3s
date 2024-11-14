@@ -47,6 +47,34 @@ body {
 .table th {
     background-color: #f8f9fa;
     font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+.table th:hover {
+    background-color: #e9ecef;
+}
+
+.table th[data-sort]::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.table th[data-sort].asc::after {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 4px solid currentColor;
+}
+
+.table th[data-sort].desc::after {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid currentColor;
 }
 
 .bi {

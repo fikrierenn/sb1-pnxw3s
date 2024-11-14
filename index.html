@@ -11,10 +11,29 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="index.html">
                 <i class="bi bi-box-seam me-2"></i>
                 Hal Kasa Takip Sistemi
             </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">
+                            <i class="bi bi-speedometer2 me-1"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reports.html">
+                            <i class="bi bi-file-earmark-text me-1"></i>
+                            Raporlar
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -24,7 +43,7 @@
             <div class="card-header bg-primary text-white">
                 <h5 class="card-title mb-0">
                     <i class="bi bi-calendar-check me-2"></i>
-                    Günlük Durum
+                    Günlük Dashboard
                 </h5>
             </div>
             <div class="card-body">
@@ -81,12 +100,9 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="stat-card" style="cursor: pointer" id="showStoreReport">
+                        <div class="stat-card">
                             <div class="stat-card-body">
-                                <h6 class="stat-card-title">
-                                    Toplam Net Kasa
-                                    <small class="text-muted">(Rapor için tıklayın)</small>
-                                </h6>
+                                <h6 class="stat-card-title">Toplam Net Kasa</h6>
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-box-seam stat-icon"></i>
                                     <span id="totalNetBoxes" class="stat-value">0</span>
@@ -124,32 +140,12 @@
             </div>
         </div>
 
-        <!-- Arama Filtreleri -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <label class="form-label">Tarih Filtrele</label>
-                        <input type="date" id="dateFilter" class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Hal Numarası</label>
-                        <input type="text" id="halNoFilter" class="form-control" placeholder="Hal numarası ile ara...">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Genel Arama</label>
-                        <input type="text" id="generalSearch" class="form-control" placeholder="Tüm alanlarda ara...">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- İşlem Tablosu -->
+        <!-- Günlük İşlemler Tablosu -->
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-0">
                     <i class="bi bi-table me-2"></i>
-                    Kasa Hareketleri Listesi
+                    Günlük İşlemler
                 </h5>
             </div>
             <div class="card-body">
@@ -160,7 +156,7 @@
                                 <th>Hal No</th>
                                 <th>İşlem Türü</th>
                                 <th>Kasa Adedi</th>
-                                <th>Tarih/Saat</th>
+                                <th>Saat</th>
                                 <th>Rehin Tutarı</th>
                                 <th>İşlemler</th>
                             </tr>

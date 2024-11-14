@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hal Dükkanları Özet Raporu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); }
+        .table th { background-color: #f8f9fa; }
+        @media print {
+            .no-print { display: none; }
+            .card { box-shadow: none; }
+            .table th { background-color: #fff !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-shop me-2"></i>
+                    Hal Dükkanları Özet Raporu
+                </h5>
+                <div class="no-print">
+                    <button onclick="window.print()" class="btn btn-light btn-sm me-2">
+                        <i class="bi bi-printer me-1"></i>
+                        Yazdır
+                    </button>
+                    <button onclick="window.close()" class="btn btn-light btn-sm">
+                        <i class="bi bi-x-lg me-1"></i>
+                        Kapat
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Hal No</th>
+                                <th>Toplam Giriş</th>
+                                <th>Toplam Çıkış</th>
+                                <th>Kalan Kasa</th>
+                                <th>Toplam Rehin Tutarı</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTable"></tbody>
+                        <tfoot id="reportFooter">
+                            <tr class="table-primary fw-bold">
+                                <td>TOPLAM</td>
+                                <td id="totalIn">0</td>
+                                <td id="totalOut">0</td>
+                                <td id="totalNet">0</td>
+                                <td id="totalPledge">₺0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('message', (event) => {
+            if (event.data.tip === 'dukkanRaporu') {
+                raporuGoster(event.data.veri);
+            }
+        });
+
+        function raporuGoster(dukkanlar) {
+            const tbody = document.getElementById('reportTable');
+            let toplamGiris = 0, toplamCikis = 0, toplamKalan = 0, toplamRehin = 0;
+
+            tbody.innerHTML = dukkanlar.map(dukkan => {
+                toplamGiris += dukkan.toplamGiris;
+                toplamCikis += dukkan.toplamCikis;
+                toplamKalan += dukkan.kalanKasa;
+                toplamRehin += dukkan.rehinTutar;
+
+                return `
+                    <tr>
+                        <td>${dukkan.halNo}</td>
+                        <td>${dukkan.toplamGiris.toLocaleString('tr-TR')}</td>
+                        <td>${dukkan.toplamCikis.toLocaleString('tr-TR')}</td>
+                        <td>${dukkan.kalanKasa.toLocaleString('tr-TR')}</td>
+                        <td>₺${dukkan.rehinTutar.toLocaleString('tr-TR')}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Toplam satırını güncelle
+            document.getElementById('totalIn').textContent = toplamGiris.toLocaleString('tr-TR');
+            document.getElementById('totalOut').textContent = toplamCikis.toLocaleString('tr-TR');
+            document.getElementById('totalNet').textContent = toplamKalan.toLocaleString('tr-TR');
+            document.getElementById('totalPledge').textContent = `₺${toplamRehin.toLocaleString('tr-TR')}`;
+        }
+    </script>
+</body>
+</html>

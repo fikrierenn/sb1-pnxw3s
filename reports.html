@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raporlar - Hal Kasa Takip Sistemi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-box-seam me-2"></i>
+                Hal Kasa Takip Sistemi
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">
+                            <i class="bi bi-speedometer2 me-1"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="reports.html">
+                            <i class="bi bi-file-earmark-text me-1"></i>
+                            Raporlar
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Rapor Seçenekleri -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center text-center p-4">
+                        <i class="bi bi-shop display-1 mb-3 text-primary"></i>
+                        <h5 class="card-title">Hal Dükkanları Özet Raporu</h5>
+                        <p class="card-text">Her hal dükkanı için güncel giriş, çıkış ve kalan kasa durumu</p>
+                        <button id="showStoreReport" class="btn btn-primary mt-auto">
+                            <i class="bi bi-file-earmark-text me-2"></i>
+                            Raporu Görüntüle
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center text-center p-4">
+                        <i class="bi bi-calendar-range display-1 mb-3 text-success"></i>
+                        <h5 class="card-title">Tarih Bazlı Hareket Raporu</h5>
+                        <p class="card-text">Belirli bir tarih aralığındaki tüm kasa hareketleri</p>
+                        <button id="showDateReport" class="btn btn-success mt-auto">
+                            <i class="bi bi-file-earmark-text me-2"></i>
+                            Raporu Görüntüle
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hal Dükkanları Özet Raporu -->
+        <div class="card mb-4" id="storeReportSection" style="display: none;">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-shop me-2"></i>
+                        Hal Dükkanları Özet Raporu
+                    </h5>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="showZeroValues">
+                        <label class="form-check-label text-white" for="showZeroValues">Sıfır Değerleri Göster</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th data-sort="halNo">Hal No</th>
+                                <th data-sort="toplamGiris">Toplam Giriş</th>
+                                <th data-sort="toplamCikis">Toplam Çıkış</th>
+                                <th data-sort="kalanKasa">Kalan Kasa</th>
+                                <th data-sort="rehinTutar">Toplam Rehin Tutarı</th>
+                            </tr>
+                        </thead>
+                        <tbody id="storeReportTable"></tbody>
+                        <tfoot>
+                            <tr class="table-primary fw-bold">
+                                <td>TOPLAM</td>
+                                <td id="totalStoreIn">0</td>
+                                <td id="totalStoreOut">0</td>
+                                <td id="totalStoreNet">0</td>
+                                <td id="totalStorePledge">₺0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarih Bazlı Hareket Raporu -->
+        <div class="card mb-4" id="dateReportFilters" style="display: none;">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-funnel me-2"></i>
+                    Rapor Filtreleri
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Başlangıç Tarihi</label>
+                        <input type="date" id="startDate" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Bitiş Tarihi</label>
+                        <input type="date" id="endDate" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Hal Numarası</label>
+                        <input type="text" id="halNoFilter" class="form-control" placeholder="Hal numarası ile ara...">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="dateReportResults" style="display: none;">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-table me-2"></i>
+                    Filtrelenmiş İşlemler
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="filteredTransactionsTable" class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Hal No</th>
+                                <th>İşlem Türü</th>
+                                <th>Kasa Adedi</th>
+                                <th>Tarih/Saat</th>
+                                <th>Rehin Tutarı</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/reports.js"></script>
+</body>
+</html>

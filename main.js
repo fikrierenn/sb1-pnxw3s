@@ -1,3 +1,5 @@
+import { raporYoneticisi } from './js/raporYoneticisi.js';
+
 // Veri yapısı
 let hareketler = [];
 
@@ -122,6 +124,8 @@ const istatistikYoneticisi = {
 const tabloYoneticisi = {
     tabloGuncelle(hareketListesi = hareketler) {
         const tbody = document.querySelector('#transactionsTable tbody');
+        if (!tbody) return;
+
         tbody.innerHTML = hareketListesi
             .sort((a, b) => b.tarihObj - a.tarihObj)
             .map(hareket => `
@@ -161,26 +165,50 @@ const tabloYoneticisi = {
 // Arama işlemleri
 const aramaYoneticisi = {
     dinleyicileriEkle() {
-        document.getElementById('halNoFilter').addEventListener('input', (e) => {
-            tabloYoneticisi.hareketleriFiltrele(e.target.value.toLowerCase());
-        });
+        const halNoFilter = document.getElementById('halNoFilter');
+        const generalSearch = document.getElementById('generalSearch');
+        const dateFilter = document.getElementById('dateFilter');
+        const showStoreReport = document.getElementById('showStoreReport');
 
-        document.getElementById('generalSearch').addEventListener('input', (e) => {
-            tabloYoneticisi.hareketleriFiltrele(e.target.value.toLowerCase());
-        });
-
-        document.getElementById('dateFilter').addEventListener('change', (e) => {
-            const secilenTarih = new Date(e.target.value);
-            secilenTarih.setHours(0, 0, 0, 0);
-
-            const filtreli = hareketler.filter(hareket => {
-                const hareketTarihi = new Date(hareket.tarihObj);
-                hareketTarihi.setHours(0, 0, 0, 0);
-                return hareketTarihi.getTime() === secilenTarih.getTime();
+        if (halNoFilter) {
+            halNoFilter.addEventListener('input', (e) => {
+                tabloYoneticisi.hareketleriFiltrele(e.target.value.toLowerCase());
             });
-            
-            tabloYoneticisi.tabloGuncelle(filtreli);
-        });
+        }
+
+        if (generalSearch) {
+            generalSearch.addEventListener('input', (e) => {
+                tabloYoneticisi.hareketleriFiltrele(e.target.value.toLowerCase());
+            });
+        }
+
+        if (dateFilter) {
+            dateFilter.addEventListener('change', (e) => {
+                const secilenTarih = new Date(e.target.value);
+                secilenTarih.setHours(0, 0, 0, 0);
+
+                const filtreli = hareketler.filter(hareket => {
+                    const hareketTarihi = new Date(hareket.tarihObj);
+                    hareketTarihi.setHours(0, 0, 0, 0);
+                    return hareketTarihi.getTime() === secilenTarih.getTime();
+                });
+                
+                tabloYoneticisi.tabloGuncelle(filtreli);
+            });
+        }
+
+        if (showStoreReport) {
+            showStoreReport.addEventListener('click', () => {
+                const dukkanOzeti = raporYoneticisi.dukkanOzetiHazirla(hareketler);
+                const raporPenceresi = window.open('rapor.html', '_blank');
+                
+                if (raporPenceresi) {
+                    raporPenceresi.addEventListener('DOMContentLoaded', () => {
+                        raporPenceresi.postMessage({ tip: 'dukkanRaporu', veri: dukkanOzeti }, '*');
+                    });
+                }
+            });
+        }
     }
 };
 
